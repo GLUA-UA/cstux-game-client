@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,6 +16,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "supertux/menu/main_menu.hpp"
+#include "supertux/menu/access_code_menu.hpp"
 
 #include "audio/sound_manager.hpp"
 #include "editor/editor.hpp"
@@ -23,6 +25,7 @@
 #include "gui/menu_manager.hpp"
 #include "supertux/fadetoblack.hpp"
 #include "supertux/gameconfig.hpp"
+#include "supertux/gluaconfig.hpp"
 #include "supertux/globals.hpp"
 #include "supertux/level.hpp"
 #include "supertux/level_parser.hpp"
@@ -51,82 +54,57 @@ bool MainMenu::s_shown_initial_dialogs = false;
 
 MainMenu::MainMenu()
 {
-  add_submenu(_("Start Game"), MenuStorage::WORLDSET_MENU);
-  // TODO: Manage to build OpenSSL for Emscripten so we can build CURL so we can
-  //       build the add-ons so we can re-enable them.
-  //       Also see src/addon/downloader.*pp
-  add_submenu(_("Add-ons"), MenuStorage::ADDON_MENU);
-#ifdef __EMSCRIPTEN__
-  add_submenu(_("Manage Assets"), MenuStorage::ASSET_MENU);
-#endif
+  add_submenu(_("Start Game"), MenuStorage::TOURNAMENT_STATUS_MENU);
   add_submenu(_("Options"), MenuStorage::OPTIONS_MENU);
-  add_entry(MNID_LEVELEDITOR, _("Level Editor"));
-  add_entry(MNID_CREDITS, _("Credits"));
-#ifndef STEAM_BUILD
-  // Links to external purchases are not allowed on Steam, including donations
-  add_entry(MNID_DONATE, _("Donate"));
-#endif
-#ifndef REMOVE_QUIT_BUTTON
-  add_entry(MNID_QUITMAINMENU, _("Quit"));
-#endif
+  add_entry(MNID_LOGOUT, _("Logout"));
+  #ifndef REMOVE_QUIT_BUTTON
+    add_entry(MNID_QUITMAINMENU, _("Quit"));
+  #endif
+  
+  /**
+   *  The following menu items are disabled for now, as they are not
+   *  necessary for the tournament mode.
+   * 
+   *  add_submenu(_("Add-ons"), MenuStorage::ADDON_MENU);
+   *  #ifdef __EMSCRIPTEN__
+   *    add_submenu(_("Manage Assets"), MenuStorage::ASSET_MENU);
+   *  #endif
+   *  add_entry(MNID_LEVELEDITOR, _("Level Editor"));
+   *  add_entry(MNID_CREDITS, _("Credits"));
+   *  #ifndef STEAM_BUILD
+   *    // Links to external purchases are not allowed on Steam, including donations
+   *    add_entry(MNID_DONATE, _("Donate"));
+   *  #endif
+   */
 
   on_window_resize();
 
-#ifndef __EMSCRIPTEN__
-  // Show network-related confirmation dialogs on first startup
-  if (g_config->is_initial() && !s_shown_initial_dialogs)
+  if (g_glua_config->user_token.empty())
   {
-    s_shown_initial_dialogs = true;
-    Dialog::show_confirmation(_("Would you allow SuperTux to connect to the Internet?\n\nThis enables additional features, such as the in-game add-on catalog."),
-      []()
-      {
-        g_config->disable_network = false;
-
-        Dialog::show_confirmation(_("Would you allow SuperTux to check for new releases on startup?\n\nYou will be notified if any are found."),
-          []()
-          {
-            g_config->do_release_check = true;
-          });
-      }, true);
+    Dialog::show_message(_("Please log in with your player\naccess code to continue."), false, false, [](){
+      MenuManager::instance().clear_menu_stack();
+      MenuManager::instance().push_menu(MenuStorage::ACCESS_CODE_MENU);
+    });
   }
-#endif
 }
 
-void
-MainMenu::on_window_resize()
+void MainMenu::on_window_resize()
 {
-  set_center_pos(static_cast<float>(SCREEN_WIDTH) / 2.0f,
-                 static_cast<float>(SCREEN_HEIGHT) / 2.0f + 35.0f);
+  set_center_pos(static_cast<float>(SCREEN_WIDTH) / 2.0f, static_cast<float>(SCREEN_HEIGHT) / 2.0f + 35.0f);
 }
 
-void
-MainMenu::menu_action(MenuItem& item)
+void MainMenu::menu_action(MenuItem& item)
 {
   switch (item.get_id())
   {
-    case MNID_CREDITS:
+    case MNID_LOGOUT:
     {
-      SoundManager::current()->stop_music(0.2f);
-      std::unique_ptr<World> world = World::from_directory("levels/misc");
-      GameManager::current()->start_level(*world, "credits.stl"); // Credits Level
-      break;
-    }
-
-    case MNID_LEVELEDITOR:
-    {
-      MenuManager::instance().clear_menu_stack();
-      std::unique_ptr<Screen> screen(new Editor());
-      auto fade = std::make_unique<FadeToBlack>(FadeToBlack::FADEOUT, 0.5f);
-      SoundManager::current()->stop_music(0.5);
-      ScreenManager::current()->push_screen(std::move(screen), std::move(fade));
-      //Editor::current()->setup();
-      break;
-    }
-
-    case MNID_DONATE:
-    {
-      Dialog::show_confirmation(_("This will take you to the SuperTux donation page. Are you sure you want to continue?"), [] {
-        FileSystem::open_url("https://www.supertux.org/donate.html");
+      Dialog::show_confirmation(_("Are you sure you want to log out?"), [] {
+        g_glua_config->user_token = "";
+        g_glua_config->user_name = "";
+        g_glua_config->save();
+        MenuManager::instance().clear_menu_stack();
+        MenuManager::instance().push_menu(MenuStorage::ACCESS_CODE_MENU);
       });
       break;
     }
@@ -138,6 +116,33 @@ MainMenu::menu_action(MenuItem& item)
       SoundManager::current()->stop_music(0.25);
       break;
     }
+    /** 
+     *  The following menu items are disabled for now, as they are not
+     *  necessary for the tournament mode.
+     * 
+     *  case MNID_CREDITS:
+     *  {
+     *    SoundManager::current()->stop_music(0.2f);
+     *    std::unique_ptr<World> world = World::from_directory("levels/misc");
+     *    GameManager::current()->start_level(*world, "credits.stl"); // Credits Level
+     *    break;
+     *  }
+     *  case MNID_LEVELEDITOR:
+     *  {
+     *    MenuManager::instance().clear_menu_stack();
+     *    std::unique_ptr<Screen> screen(new Editor());
+     *    auto fade = std::make_unique<FadeToBlack>(FadeToBlack::FADEOUT, 0.5f);
+     *    SoundManager::current()->stop_music(0.5);
+     *    ScreenManager::current()->push_screen(std::move(screen), std::move(fade));
+     *    break;
+     *  }
+     *  case MNID_DONATE:
+     *  {
+     *    Dialog::show_confirmation(_("This will take you to the SuperTux donation page. Are you sure you want to continue?"), [] {
+     *      FileSystem::open_url("https://www.supertux.org/donate.html");
+     *    });
+     *    break;
+    */
   }
 }
 

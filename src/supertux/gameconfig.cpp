@@ -1,5 +1,6 @@
-//  SuperTux -  A Jump'n Run
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -80,7 +81,7 @@ Config::Config() :
   pause_on_focusloss(true),
   custom_mouse_cursor(true),
   do_release_check(false),
-  disable_network(true),
+  disable_network(false),
   custom_title_levels(true),
 #ifdef ENABLE_DISCORD
   enable_discord(false),

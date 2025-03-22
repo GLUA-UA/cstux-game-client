@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -33,10 +34,16 @@ public:
 
 private:
   enum MainMenuIDs {
-    MNID_LEVELEDITOR,
-    MNID_CREDITS,
-    MNID_DONATE,
+    MNID_LOGOUT,
     MNID_QUITMAINMENU
+    /**
+     *  These menu IDs are unused for now, as they are not
+     *  necessary for the tournament mode.
+     *
+     *  MNID_LEVELEDITOR,
+     *  MNID_CREDITS,
+     *  MNID_DONATE,
+     */
   };
 
 private:
