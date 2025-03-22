@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,6 +21,7 @@
 #include <memory>
 
 class Config;
+class GluaConfig;
 
 // This is meant to be temporarily. Code should not use
 // SCREEN_WIDTH/HEIGHT, but instead use context.get_width()/height()
@@ -28,6 +30,7 @@ class Config;
 #define SCREEN_HEIGHT (VideoSystem::current()->get_viewport().get_screen_height())
 
 extern Config* g_config;
+extern GluaConfig* g_glua_config;
 
 extern float g_game_time;
 extern float g_real_time;

@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include "supertux/console.hpp"
 #include "supertux/game_manager.hpp"
 #include "supertux/gameconfig.hpp"
+#include "supertux/gluaconfig.hpp"
 #include "supertux/player_status.hpp"
 #include "supertux/profile_manager.hpp"
 #include "supertux/resources.hpp"
@@ -47,6 +49,7 @@ public:
 
 private:
   Config m_config;
+  GluaConfig m_glua_config;
 };
 
 class PhysfsSubsystem final

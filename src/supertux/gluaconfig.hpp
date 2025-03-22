@@ -1,5 +1,4 @@
 //  SuperTux - GLUA Game Client
-//  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
 //  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -15,12 +14,28 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "supertux/globals.hpp"
+#ifndef HEADER_SUPERTUX_SUPERTUX_GLUACONFIG_HPP
+#define HEADER_SUPERTUX_SUPERTUX_GLUACONFIG_HPP
 
-Config* g_config;
-GluaConfig * g_glua_config;
+#include <string>
 
-float g_game_time = 0;
-float g_real_time = 0;
+class GluaConfig final
+{
+public:
+  GluaConfig();
+
+  void load();
+  void save();
+
+private:
+  bool first_run;
+
+public:
+  std::string game_server_url;
+  std::string user_token;
+  std::string user_name;
+};
+
+#endif
 
 /* EOF */

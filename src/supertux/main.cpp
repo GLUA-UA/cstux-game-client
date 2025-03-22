@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -92,7 +93,8 @@ extern "C" {
 static Timelog s_timelog;
 
 ConfigSubsystem::ConfigSubsystem() :
-  m_config()
+  m_config(),
+  m_glua_config()
 {
   g_config = &m_config;
   try {
@@ -101,6 +103,15 @@ ConfigSubsystem::ConfigSubsystem() :
   catch(const std::exception& e)
   {
     log_info << "Couldn't load config file: " << e.what() << ", using default settings" << std::endl;
+  }
+
+  g_glua_config = &m_glua_config;
+  try {
+    m_glua_config.load();
+  }
+  catch (const std::exception &e)
+  {
+    log_info << "Couldn't load glua config file: " << e.what() << ", using default settings" << std::endl;
   }
 
   // init random number stuff
@@ -115,6 +126,15 @@ ConfigSubsystem::~ConfigSubsystem()
   try
   {
     m_config.save();
+  }
+  catch(std::exception& e)
+  {
+    log_warning << "Error saving config: " << e.what() << std::endl;
+  }
+
+  try
+  {
+    m_glua_config.save();
   }
   catch(std::exception& e)
   {
