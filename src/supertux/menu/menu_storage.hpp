@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -35,7 +36,9 @@ public:
     OPTIONS_MENU,
     INGAME_OPTIONS_MENU,
     PROFILE_MENU,
-    WORLDSET_MENU,
+    /**
+     *  WORLDSET_MENU,
+     */
     CONTRIB_MENU,
     CONTRIB_WORLD_MENU,
     ADDON_MENU,
@@ -68,7 +71,9 @@ public:
     ASSET_MENU,
     CUSTOM_MENU_MENU,
     MULTIPLAYER_MENU,
-    MULTIPLAYER_PLAYERS_MENU
+    MULTIPLAYER_PLAYERS_MENU,
+    ACCESS_CODE_MENU,
+    TOURNAMENT_STATUS_MENU
   };
 
 public:

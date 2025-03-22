@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2009 Ingo Ruhnke <grumbel@gmail.com>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -51,7 +52,11 @@
 #include "supertux/menu/web_asset_menu.hpp"
 #include "supertux/menu/worldmap_menu.hpp"
 #include "supertux/menu/worldmap_cheat_menu.hpp"
-#include "supertux/menu/world_set_menu.hpp"
+/**
+ *  #include "supertux/menu/world_set_menu.hpp" 
+ */
+#include "supertux/menu/access_code_menu.hpp"
+#include "supertux/menu/tournament_status_menu.hpp"
 #include "util/log.hpp"
 
 MenuStorage* MenuStorage::s_instance = nullptr;
@@ -121,8 +126,10 @@ MenuStorage::create(MenuId menu_id)
     case DEBUG_MENU:
       return std::make_unique<DebugMenu>();
 
-    case WORLDSET_MENU:
-      return std::make_unique<WorldSetMenu>();
+    /**
+     *  case WORLDSET_MENU:
+     *    return std::make_unique<WorldSetMenu>();
+     */
 
     case CONTRIB_MENU:
       return std::make_unique<ContribMenu>();
@@ -196,6 +203,12 @@ MenuStorage::create(MenuId menu_id)
 
     case MULTIPLAYER_PLAYERS_MENU:
       return std::make_unique<MultiplayerPlayersMenu>();
+
+    case ACCESS_CODE_MENU:
+      return std::make_unique<AccessCodeMenu>();
+
+    case TOURNAMENT_STATUS_MENU:
+      return std::make_unique<TournamentStatusMenu>();
 
     case NO_MENU:
       return std::unique_ptr<Menu>();
