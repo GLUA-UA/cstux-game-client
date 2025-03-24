@@ -1,6 +1,7 @@
 #
-# SuperTux - root build script
+# SuperTux - GLUA Game Client
 # Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+# Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -104,7 +105,7 @@ if(EMSCRIPTEN)
   set(CMAKE_EXECUTABLE_SUFFIX .html)
   set(IS_EMSCRIPTEN_BUILD ON)
 
-  set(EM_USE_FLAGS "-sDISABLE_EXCEPTION_CATCHING=0")
+  set(EM_USE_FLAGS "-sDISABLE_EXCEPTION_CATCHING=0 -sFETCH=1")
   set(EM_LINK_FLAGS " -sINITIAL_MEMORY=134217728 -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=536870912 -sERROR_ON_UNDEFINED_SYMBOLS=0 --preload-file ${BUILD_CONFIG_DATA_DIR} --use-preload-plugins -lidbfs.js")
   if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(EM_USE_FLAGS "${EM_USE_FLAGS} -fsanitize=undefined")
