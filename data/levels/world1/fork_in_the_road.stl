@@ -255,7 +255,7 @@
     (scripttrigger
       (width 32)
       (height 448)
-      (script "state.fitr_down = true;")
+      (script "state.fitr_up = true;")
       (button #f)
       (x 15104)
       (y 544)
