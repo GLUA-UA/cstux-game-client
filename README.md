@@ -1,4 +1,4 @@
-# SuperTux Game Client
+# SuperTux GLUA Game Client
 
 This is a modified version of the SuperTux game that implements functionality to make it possible to play in a tournament. This fork implements the following features:
 
