@@ -1,5 +1,6 @@
-//  SuperTux
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -907,6 +908,17 @@ GameSession::start_sequence(Player* caller, Sequence seq, const SequenceData* da
 
   /* Slow down the game for end-sequence. */
   ScreenManager::current()->set_speed(0.5f);
+
+  /**
+   *  TODO: Add here code to report the level statistics to the
+   *  statistics system.
+   */
+  std::cout << "Level finnish" << std::endl;
+  std::cout << "Level name: " << m_level->get_name() << std::endl;
+  std::cout << "Level time: " << m_play_time << std::endl;
+  std::cout << "Coins: " << m_level->m_stats.get_coins() << std::endl;
+  std::cout << "Badguys: " << m_level->m_stats.get_badguys() << std::endl;
+  std::cout << "Secrets: " << m_level->m_stats.get_secrets() << std::endl;
 
   m_end_sequence->start();
 
