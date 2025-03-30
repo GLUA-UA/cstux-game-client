@@ -1,7 +1,8 @@
-//  SuperTux -  A Jump'n Run
+//  SuperTux - GLUA Game Client
 //  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmail.com>
 //  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
 //                2023 Vankata453
+//  Copyright (C) 2025 Miguel Vila <miguelovila@ua.pt>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -346,6 +347,14 @@ WorldMapSector::update(float dt_sec)
           return;
         }
         log_warning << "No level to enter at: " << tux_pos.x << ", " << tux_pos.y << std::endl;
+        return;
+      }
+
+      /**
+       *  Prevent entering a level if the level is already solved.
+       */
+      if (level_->is_solved()) {
+        log_warning << "Level already solved: " << level_->get_level_filename() << std::endl;
         return;
       }
 
