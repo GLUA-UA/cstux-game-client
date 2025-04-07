@@ -54,7 +54,7 @@ void downloadSucceeded(emscripten_fetch_t *fetch)
              << std::endl;
 
     // Check the response content (same logic as before)
-    if (response.find("Status:valid") != std::string::npos)
+    if (response.find("status:valid") != std::string::npos)
     {
       log_info << "Access code validation successful" << std::endl;
 
@@ -145,7 +145,7 @@ void validate_token(const std::string &token,
 
   // API endpoint URL
   std::string api_url =
-      g_glua_config->game_server_url + "/verify_access_code?access_code=" + token;
+      g_glua_config->game_server_url + "/api/v1/auth/login?accesscode=" + token;
 
   log_info << "Validating access code via URL: " << api_url << std::endl;
 
@@ -187,7 +187,7 @@ void validate_token(const std::string &token,
     log_info << "Access code validation response: " << response << std::endl;
 
     // Check the response
-    if (response.find("Status:valid") != std::string::npos)
+    if (response.find("status:valid") != std::string::npos)
     {
       log_info << "Access code validation successful" << std::endl;
 
