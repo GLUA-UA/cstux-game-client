@@ -29,7 +29,7 @@
 #include <emscripten/html5.h>
 #endif
 
-GluaConfig::GluaConfig() : game_server_url("http://localhost:5000"),
+GluaConfig::GluaConfig() : game_server_url("http://localhost:3000"),
                            user_token(""),
                            user_name("")
 {

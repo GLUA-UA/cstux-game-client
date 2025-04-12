@@ -1,6 +1,10 @@
 # Build Files
 build/
 build.*/
+build-web/
+build-web.*/
+build-native/
+build-native.*/
 **/CMakeFiles/
 **/CMakeCache.txt
 supertux2
