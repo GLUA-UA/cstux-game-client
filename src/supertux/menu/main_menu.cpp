@@ -35,6 +35,7 @@
 #include "supertux/game_manager.hpp"
 #include "supertux/world.hpp"
 #include "util/log.hpp"
+#include "util/api_fetcher.hpp"
 #include "video/video_system.hpp"
 #include "video/viewport.hpp"
 
@@ -44,6 +45,7 @@
 #else
   #include <cstdlib>
 #endif
+#include <iostream>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -100,9 +102,27 @@ void MainMenu::menu_action(MenuItem& item)
     case MNID_LOGOUT:
     {
       Dialog::show_confirmation(_("Are you sure you want to log out?"), [] {
+
+        std::string api_url = g_glua_config->game_server_url + "/api/v1/auth/logout?token=" + g_glua_config->user_token;
+        std::cout << "[LOGOUT MENU] Logout URL: " << api_url << std::endl;
+
+        fetch_api(api_url, [](const std::string& response) {
+          if (response.find("status=valid") != std::string::npos)
+          {
+            std::cout << "[LOGOUT MENU] Logout successful: " << response << std::endl;
+          }
+          else
+          {
+            std::cerr << "[LOGOUT MENU] Logout failed: " << response << std::endl;
+          }
+        }, [](const std::string& error) {
+          std::cerr << "[LOGOUT MENU] Logout error: " << error << std::endl;
+        });
+
         g_glua_config->user_token = "";
         g_glua_config->user_name = "";
         g_glua_config->save();
+        
         MenuManager::instance().clear_menu_stack();
         MenuManager::instance().push_menu(MenuStorage::ACCESS_CODE_MENU);
       });
